@@ -61,9 +61,14 @@ class Blockchain {
    * that this method is a private method.
    */
   _addBlock(block) {
-    let self = this
-    return new Promise(async (resolve, reject) => {})
-  }
+    let self = this;
+    return new Promise(async (resolve, reject) => {
+      resolve(this.height = getChainHeight + 1;
+  this.time = Date.now();
+       );
+ reject("failed to add block");
+    });
+}
 
   /**
    * The requestMessageOwnershipVerification(address) method
@@ -74,8 +79,11 @@ class Blockchain {
    * @param {*} address
    */
   requestMessageOwnershipVerification(address) {
-    return new Promise((resolve) => {})
-  }
+    return new Promise((resolve) => {
+        address:${new Date().getTime().toString().slice(0,-3)}:starRegistry;
+  resolve();
+    });
+}
 
   /**
    * The submitStar(address, message, signature, star) method
@@ -95,9 +103,16 @@ class Blockchain {
    * @param {*} star
    */
   submitStar(address, message, signature, star) {
-    let self = this
-    return new Promise(async (resolve, reject) => {})
-  }
+    let self = this;
+    return new Promise(async (resolve, reject) => {
+parseInt(message.split(':')[1])
+let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
+
+bitcoinMessage.verify(message, address, signature);
+   _addblock();
+resolve();
+    });
+}
 
   /**
    * This method will return a Promise that will resolve with the Block
@@ -106,10 +121,11 @@ class Blockchain {
    * @param {*} hash
    */
   getBlockByHash(hash) {
-    let self = this
-    return new Promise((resolve, reject) => {})
-  }
-
+    let self = this;
+    return new Promise((resolve, reject) => {
+this.chain.filter(this.hash);
+    });
+}
   /**
    * This method will return a Promise that will resolve with the Block object
    * with the height equal to the parameter `height`
@@ -146,10 +162,13 @@ class Blockchain {
    * 2. Each Block should check the with the previousBlockHash
    */
   validateChain() {
-    let self = this
-    let errorLog = []
-    return new Promise(async (resolve, reject) => {})
-  }
+    let self = this;
+    let errorLog = [];
+    return new Promise(async (resolve, reject) => {
+       self.chain.filer(validate);
+
+    });
+}
 }
 
 module.exports.Blockchain = Blockchain

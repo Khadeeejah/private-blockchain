@@ -38,6 +38,7 @@ class Block {
     let self = this
     return new Promise((resolve, reject) => {
       // Save in auxiliary variable the current block hash
+
       self.hash = null
       // Recalculate the hash of the Block
       let hash = SHA256(JSON.stringify(self)).toString()
@@ -46,7 +47,7 @@ class Block {
       if (self == hash) {
         resolve('true')
       } else {
-        reject('false')
+        resolve('false')
       }
       // Returning the Block is not valid
 
@@ -64,21 +65,27 @@ class Block {
    *     or Reject with an error.
    */
   getBData() {
-    let self = this.data
-    return new Promise((resolve, reject) => {
-      // Getting the encoded data saved in the Block
-
-      // Decoding the data to retrieve the JSON representation of the object
-      try {
-        let decode = hex2ascii(self)
-      } catch {
-        console.log('error decoding block data')
-      }
-      // Parse the data to an object to be retrieve.
-      decode = JSON.parse(decode)
-      // Resolve with the data if the object isn't the Genesis block
-    })
-  }
+    // Getting the encoded data saved in the Block
+    // Decoding the data to retrieve the JSON representation of the object
+    // Parse the data to an object to be retrieve.
+    // Resolve with the data if the object isn't the Genesis block
+    
+    let self = this;
+    return new Promise(async  (resolve, reject) => {
+         {
+    
+        //}            else 
+        if (self.height !== 0) {
+            console.log(`getBData resolved: ${JSON.parse(hex2ascii(self.body))}`);
+            resolve(JSON.parse(hex2ascii(self.body)));
+        } else {
+             console.log("getBData rejected.");
+             reject(new Error("An unexpected error occurred."));
+             //reject("No  block data.");
+        }
+    } );
 }
+}
+      // Resolve with the data if the object isn't the Genesis bloc
 
 module.exports.Block = Block // Exposing the Block class as a module

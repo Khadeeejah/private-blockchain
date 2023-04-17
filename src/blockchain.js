@@ -61,14 +61,29 @@ class Blockchain {
    * that this method is a private method.
    */
   _addBlock(block) {
-    let self = this;
-    return new Promise(async (resolve, reject) => {
-      resolve(this.height = getChainHeight + 1;
-  this.time = Date.now();
-       );
- reject("failed to add block");
-    });
-}
+        let self = this;
+        return new Promise(async (resolve, reject) => {
+           try{
+               block.height = this.chain.length;
+               block.time = new Date().getTime().toString().slice(0,-3);
+
+               if (this.chain.length>0) {
+                   // previous block hash
+                   block.previousHash = this.chain[this.chain.length-1];
+               }
+
+               // SHA256 requires a string of data
+               block.hash = SHA256(JSON.stringify(block)).toString();
+
+               // add block to chain
+               this.chain.push(block);
+               // resolve with block
+               resolve(block);
+           } catch (_e) {
+               reject(_e);
+           }
+        });
+    }
 
   /**
    * The requestMessageOwnershipVerification(address) method

@@ -34,27 +34,26 @@ class Block {
    *  5. Resolve true or false depending if it is valid or not.
    *  Note: to access the class values inside a Promise code you need to create an auxiliary value `let self = this;`
    */
+
   validate() {
     let self = this
     return new Promise((resolve, reject) => {
       // Save in auxiliary variable the current block hash
+      const blockHash = this.hash
 
-      self.hash = null
       // Recalculate the hash of the Block
-      let hash = SHA256(JSON.stringify(self)).toString()
-      self.hash = hash
-      // Comparing if the hashes changed
-      if (self == hash) {
-        resolve('true')
-      } else {
-        resolve('false')
-      }
-      // Returning the Block is not valid
+      this.hash = SHA256(JSON.stringify(self))
 
-      // Returning the Block is valid
+      // Comparing if the hashes changed
+      if (this.hash == blockHash) {
+        // Returning the Block is valid
+        resolve(true)
+      } else {
+        // Returning the Block is not valid
+        reject(false)
+      }
     })
   }
-
   /**
    *  Auxiliary Method to return the block body (decoding the data)
    *  Steps:
@@ -69,23 +68,21 @@ class Block {
     // Decoding the data to retrieve the JSON representation of the object
     // Parse the data to an object to be retrieve.
     // Resolve with the data if the object isn't the Genesis block
-    
-    let self = this;
-    return new Promise(async  (resolve, reject) => {
-         {
-    
-        //}            else 
-        if (self.height !== 0) {
-            console.log(`getBData resolved: ${JSON.parse(hex2ascii(self.body))}`);
-            resolve(JSON.parse(hex2ascii(self.body)));
-        } else {
-             console.log("getBData rejected.");
-             reject(new Error("An unexpected error occurred."));
-             //reject("No  block data.");
-        }
-    } );
+
+    let self = this
+    return new Promise(async (resolve, reject) => {
+      //}            else
+      if (self.height !== 0) {
+        console.log(`getBData resolved: ${JSON.parse(hex2ascii(self.body))}`)
+        resolve(JSON.parse(hex2ascii(self.body)))
+      } else {
+        console.log('getBData rejected.')
+        reject(new Error('An unexpected error occurred.'))
+        //reject("No  block data.");
+      }
+    })
+  }
 }
-}
-      // Resolve with the data if the object isn't the Genesis bloc
+// Resolve with the data if the object isn't the Genesis bloc
 
 module.exports.Block = Block // Exposing the Block class as a module

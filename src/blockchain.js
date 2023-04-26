@@ -61,29 +61,29 @@ class Blockchain {
    * that this method is a private method.
    */
   _addBlock(block) {
-        let self = this;
-        return new Promise(async (resolve, reject) => {
-           try{
-               block.height = this.chain.length;
-               block.time = new Date().getTime().toString().slice(0,-3);
+    let self = this
+    return new Promise(async (resolve, reject) => {
+      try {
+        block.height = this.chain.length
+        block.time = new Date().getTime().toString().slice(0, -3)
 
-               if (this.chain.length>0) {
-                   // previous block hash
-                   block.previousHash = this.chain[this.chain.length-1];
-               }
+        if (this.chain.length > 0) {
+          // previous block hash
+          block.previousHash = this.chain[this.chain.length - 1]
+        }
 
-               // SHA256 requires a string of data
-               block.hash = SHA256(JSON.stringify(block)).toString();
+        // SHA256 requires a string of data
+        block.hash = SHA256(JSON.stringify(block)).toString()
 
-               // add block to chain
-               this.chain.push(block);
-               // resolve with block
-               resolve(block);
-           } catch (_e) {
-               reject(_e);
-           }
-        });
-    }
+        // add block to chain
+        this.chain.push(block)
+        // resolve with block
+        resolve(block)
+      } catch (_e) {
+        reject(_e)
+      }
+    })
+  }
 
   /**
    * The requestMessageOwnershipVerification(address) method
@@ -94,11 +94,14 @@ class Blockchain {
    * @param {*} address
    */
   requestMessageOwnershipVerification(address) {
-    let message = `${address}:${new Date().getTime().toString().slice(0,-3)}:starRegistry`;
-resolve(message);
-  resolve();
-    };
-}
+    return new Promise((resolve, reject) => {
+      let message = `${address}:${new Date()
+        .getTime()
+        .toString()
+        .slice(0, -3)}:starRegistry`
+      resolve(message)
+    })
+  }
 
   /**
    * The submitStar(address, message, signature, star) method
@@ -118,16 +121,39 @@ resolve(message);
    * @param {*} star
    */
   submitStar(address, message, signature, star) {
-    let self = this;
+    let self = this
     return new Promise(async (resolve, reject) => {
-parseInt(message.split(':')[1])
-let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));
+      try {
+        const msgTime = parseInt(message.split(':')[1])
+        const currentTime = parseInt(
+          new Date().getTime().toString().slice(0, -3),
+        )
 
-bitcoinMessage.verify(message, address, signature);
-   _addblock();
-resolve();
-    });
-}
+        // difference in minutes
+        const diffMins = Math.round(
+          ((currentTime - (msgTime % 86400000)) % 3600000) / 60000,
+        ) // minute
+
+        // if greater than 5 mins
+        if (diffMins > 5) {
+          reject(Error('Error: Older than 5 minutes'))
+        }
+
+        // verify signature
+        if (!bitcoinMessage.verify(message, address, signature)) {
+          reject(Error('Invalid Signature'))
+        }
+
+        let data = { owner: message.split(':')[0], star: star }
+
+        let block = new BlockClass.Block(data)
+        block = await self._addBlock(block)
+        resolve(block)
+      } catch (_e) {
+        reject(_e)
+      }
+    })
+  }
 
   /**
    * This method will return a Promise that will resolve with the Block
@@ -136,11 +162,11 @@ resolve();
    * @param {*} hash
    */
   getBlockByHash(hash) {
-    let self = this;
+    let self = this
     return new Promise((resolve, reject) => {
-this.chain.filter(this.hash);
-    });
-}
+      this.chain.filter(this.hash)
+    })
+  }
   /**
    * This method will return a Promise that will resolve with the Block object
    * with the height equal to the parameter `height`
@@ -177,13 +203,12 @@ this.chain.filter(this.hash);
    * 2. Each Block should check the with the previousBlockHash
    */
   validateChain() {
-    let self = this;
-    let errorLog = [];
+    let self = this
+    let errorLog = []
     return new Promise(async (resolve, reject) => {
-       self.chain.filer(validate);
-
-    });
-}
+      self.chain.filer(validate)
+    })
+  }
 }
 
 module.exports.Blockchain = Blockchain

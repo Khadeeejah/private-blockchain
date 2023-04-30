@@ -69,7 +69,7 @@ class Blockchain {
 
         if (this.chain.length > 0) {
           // previous block hash
-          block.previousHash = this.chain[this.chain.length - 1]
+          block.previousBlockHash = this.chain[this.chain.length - 1]
         }
 
         // SHA256 requires a string of data
@@ -130,9 +130,7 @@ class Blockchain {
         )
 
         // difference in minutes
-        const diffMins = Math.round(
-          ((currentTime - (msgTime % 86400000)) % 3600000) / 60000,
-        ) // minute
+        const diffMins = Math.round(currentTime - msgTime > 300) // minute
 
         // if greater than 5 mins
         if (diffMins > 5) {

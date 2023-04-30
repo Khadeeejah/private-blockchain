@@ -42,7 +42,7 @@ class Block {
       const blockHash = this.hash
 
       // Recalculate the hash of the Block
-      this.hash = SHA256(JSON.stringify(self))
+      newHash = SHA256(JSON.stringify(self)).toString()
 
       // Comparing if the hashes changed
       if (this.hash == blockHash) {
